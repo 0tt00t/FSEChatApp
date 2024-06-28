@@ -1,19 +1,31 @@
-<link rel="stylesheet" type="text/css" href="/styles.css">
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>FSE Chat Room</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
         #chat {
             height: 300px;
             border: 1px solid #ccc;
             overflow-y: scroll;
             padding: 10px;
+            background-color: #f9f9f9;
         }
         
         .message {
             margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
         }
         
         .message .username {
@@ -24,6 +36,43 @@
             font-size: 0.8em;
             color: gray;
         }
+        
+        #messageForm {
+            margin-top: 10px;
+        }
+        
+        #messageForm textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        #messageForm button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #87ceeb;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1em;
+        }
+        
+        #logout {
+            float: right;
+            background-color: #f08080;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        h1 {
+            display: inline;
+        }
     </style>
 </head>
 
@@ -33,13 +82,15 @@
     <div id="chat">
         <% messages.forEach(function(message) { %>
             <div class="message">
-                <span class="username"><%= message.username %>:</span>
-                <span class="text"><%= message.message %></span>
-                <span class="timestamp"><%= new Date(message.timestamp).toLocaleString() %></span>
+                <div class="message-header">
+                    <span class="username"><%- message.username %></span>
+                    <span class="timestamp"><%- new Date(message.timestamp).toLocaleString() %></span>
+                </div>
+                <span class="text"><%- message.message %></span>
             </div>
             <% }); %>
     </div>
-    <form id="messageForm" method="post">
+    <form id="messageForm" action="/messages" method="post">
         <input type="hidden" name="username" value="<%= username %>">
         <textarea name="message" placeholder="Enter your message" required></textarea>
         <button type="submit">Post</button>
@@ -50,18 +101,19 @@
         const socket = io();
         const chat = document.getElementById('chat');
         const messageForm = document.getElementById('messageForm');
-
-        socket.on('message', function(message) {
-            addMessage(message);
-        });
+        const username = '<%= username %>';
 
         function addMessage(message) {
             const div = document.createElement('div');
             div.classList.add('message');
-            div.innerHTML = `<span class="username">${message.username}:</span> <span class="text">${message.message}</span> <span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span>`;
+            div.innerHTML = `<div class="message-header"><span class="username">${message.username === username ? 'Me' : message.username}</span><span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span></div><span class="text">${message.message}</span>`;
             chat.appendChild(div);
             chat.scrollTop = chat.scrollHeight;
         }
+
+        socket.on('message', function(message) {
+            addMessage(message);
+        });
 
         messageForm.addEventListener('submit', async(e) => {
             e.preventDefault();
@@ -80,14 +132,11 @@
             });
 
             if (response.ok) {
-                const message = await response.json();
-                addMessage(message);
                 messageForm.reset();
             } else {
                 alert('Error sending message');
             }
         });
-
 
         document.getElementById('logout').addEventListener('click', () => {
             window.location.href = '/';

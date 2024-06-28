@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/styles.css">
-
 <!DOCTYPE html>
 <html>
 
@@ -7,62 +5,86 @@
     <title>FSE Chat Room</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
         
-        h1 {
+        .container {
             text-align: center;
         }
         
-        form {
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         
-        input {
-            margin-bottom: 10px;
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 200px;
             padding: 10px;
-            font-size: 16px;
-            width: 300px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         
         button {
+            width: 220px;
             padding: 10px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
+            margin: 10px 0;
+            background-color: #87ceeb;
             border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
         }
         
         button:hover {
-            background-color: #0056b3;
+            background-color: #00bfff;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 220px;
+        }
+        
+        .button-container button {
+            width: 100px;
         }
     </style>
 </head>
 
 <body>
-    <h1>FSE Chat Room</h1>
+    <div class="container">
+        <h1>FSE Chat Room</h1>
+        <form id="registerForm" action="/register" method="post">
+            <input type="text" id="registerUsername" name="username" placeholder="Username" required>
+            <input type="password" id="registerPassword" name="password" placeholder="Password" required>
+            <div class="button-container">
+                <button type="submit">Register</button>
+                <button type="button" id="loginButton">Login</button>
+            </div>
+        </form>
+    </div>
 
-    <h2>Register</h2>
-    <form id="registerForm" action="/register" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Register</button>
-    </form>
-
-    <h2>Login</h2>
-    <form id="loginForm" action="/login" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            document.getElementById('registerForm').action = '/login';
+            document.getElementById('registerForm').submit();
+        });
+    </script>
 </body>
 
 </html>
