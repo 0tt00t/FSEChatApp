@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
 
+<!--HEAD-->
 <head>
     <title>FSE Chat Room</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
+
+        /*Embeded CSS*/
         #chat {
             height: 300px;
             border: 1px solid #ccc;
@@ -76,6 +79,7 @@
     </style>
 </head>
 
+<!--Main Body-->
 <body>
     <h1>FSE Chat Room</h1>
     <button id="logout">Logout</button>
@@ -96,38 +100,53 @@
         <button type="submit">Post</button>
     </form>
 
+    <!--JavaScript-->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        // Initialize socket io
         const socket = io();
+        // Acquire DOM from chat page
         const chat = document.getElementById('chat');
+        // Get message Form
         const messageForm = document.getElementById('messageForm');
+        // Get name
         const username = '<%= username %>';
 
+        // ADD message to the chat window
         function addMessage(message) {
+            // Create message list
             const div = document.createElement('div');
             div.classList.add('message');
+            // If name is the same, then show it up 'me'
             div.innerHTML = `<div class="message-header"><span class="username">${message.username === username ? 'Me' : message.username}</span><span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span></div><span class="text">${message.message}</span>`;
+            // Add new message to the list
             chat.appendChild(div);
+            // Showing the newest message
             chat.scrollTop = chat.scrollHeight;
         }
 
+        // When message occurs, then 'addmessage'
         socket.on('message', function(message) {
             addMessage(message);
         });
 
+        // Eventlistener to DOM of the message
         messageForm.addEventListener('submit', async(e) => {
             e.preventDefault();
+            //Get info from messageForm
             const formData = new FormData(messageForm);
             const data = {
                 username: formData.get('username'),
                 message: formData.get('message')
             };
 
+            // Send request to the server
             const response = await fetch('/messages', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                // Transfer to JSON string
                 body: JSON.stringify(data)
             });
 
@@ -138,6 +157,7 @@
             }
         });
 
+        // Logout redirect to home
         document.getElementById('logout').addEventListener('click', () => {
             window.location.href = '/';
         });
