@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FSE Chat Room</title>
     <style>
         body {
@@ -11,14 +12,20 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            padding: 2%;
+            box-sizing: border-box;
         }
         
         .container {
             text-align: center;
+            width: 100%;
+            max-width: 400px; /* 限制容器的最大宽度 */
+            padding: 20px; /* 使用固定的内边距 */
+            box-sizing: border-box;
         }
         
         h1 {
-            font-size: 24px;
+            font-size: 24px; /* 使用固定字体大小 */
             margin-bottom: 20px;
         }
         
@@ -28,25 +35,34 @@
             align-items: center;
         }
         
+        label {
+            width: 100%;
+            text-align: left;
+            font-size: 16px; /* 使用固定字体大小 */
+            margin: 10px 0; /* 增加上下的间距 */
+            box-sizing: border-box;
+        }
+
         input[type="text"],
         input[type="password"] {
-            width: 200px;
-            padding: 10px;
+            width: 100%; /* 占据整个容器的宽度 */
+            padding: 10px; /* 使用固定内边距 */
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-size: 16px; /* 使用固定字体大小 */
         }
         
         button {
-            width: 220px;
-            padding: 10px;
+            width: 100%;
+            padding: 10px; /* 使用固定内边距 */
             margin: 10px 0;
             background-color: #87ceeb;
             border: none;
             border-radius: 5px;
-            color: white;
-            font-size: 16px;
+            color: rgb(0, 0, 0);
+            font-size: 16px; /* 使用固定字体大小 */
             cursor: pointer;
         }
         
@@ -57,12 +73,36 @@
         .button-container {
             display: flex;
             justify-content: space-between;
-            width: 220px;
+            width: 100%;
+            gap: 10px; /* 按钮之间增加固定间距 */
         }
         
         .button-container button {
-            width: 100px;
+            flex: 1; /* 按钮均分可用空间 */
         }
+
+        /* 仅在手机端或小屏设备上应用相对单位和比例 */
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 6vw; /* 使用视口宽度设置字体大小 */
+            }
+
+            label,
+            input[type="text"],
+            input[type="password"],
+            button {
+                font-size: 4vw; /* 使用视口宽度设置字体大小 */
+            }
+
+            .container {
+                padding: 5vw; /* 使用视口宽度设置内边距 */
+            }
+
+            .button-container {
+                gap: 5vw; /* 按钮之间增加相对间距 */
+            }
+        }
+
     </style>
 </head>
 
@@ -70,11 +110,15 @@
     <div class="container">
         <h1>FSE Chat Room</h1>
         <form id="registerForm" action="/register" method="post">
-            <input type="text" id="registerUsername" name="username" placeholder="Username" required>
-            <input type="password" id="registerPassword" name="password" placeholder="Password" required>
+            <label for="registerUsername">Username</label>
+            <input type="text" id="registerUsername" name="username" required>
+            
+            <label for="registerPassword">Password</label>
+            <input type="password" id="registerPassword" name="password" required>
+            
             <div class="button-container">
-                <button type="submit">Register</button>
                 <button type="button" id="loginButton">Login</button>
+                <button type="submit">Register</button>
             </div>
         </form>
     </div>

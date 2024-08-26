@@ -3,22 +3,24 @@
 
 <!--HEAD-->
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FSE Chat Room</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <style>
 
         /*Embeded CSS*/
         #chat {
-            height: 300px;
+            height: 50vh; 
             border: 1px solid #ccc;
             overflow-y: scroll;
-            padding: 10px;
+            padding: 2%; 
             background-color: #f9f9f9;
+            box-sizing: border-box; 
         }
         
         .message {
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 2%; 
+            padding: 2%; 
             background-color: #f0f0f0;
             border-radius: 5px;
             display: flex;
@@ -28,7 +30,7 @@
         .message-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 1%; 
         }
         
         .message .username {
@@ -36,53 +38,113 @@
         }
         
         .message .timestamp {
-            font-size: 0.8em;
+            font-size: 1.5vh; 
             color: gray;
         }
         
         #messageForm {
-            margin-top: 10px;
+            margin-top: 2%;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         #messageForm textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
+            width: 100%; 
+            padding: 2%; 
             border-radius: 5px;
             border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 2vh; 
         }
         
+        .button-container {
+            background-color: #87ceeb; 
+            padding: 2%; 
+            border-radius: 5px; 
+            text-align: center; 
+            display: flex;
+            justify-content: center;
+            margin-top: 2%; 
+        }
+
         #messageForm button {
             display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #87ceeb;
+            padding: 1% 4%; 
+            background-color: #ff9100;
             border: none;
             border-radius: 5px;
-            color: white;
-            font-size: 1em;
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+            font-size: 2vh; 
         }
         
+        .header {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            background-color: #87ceeb; 
+            padding: 2%; 
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 3vh; 
+            color: black;
+        }        
+
         #logout {
-            float: right;
-            background-color: #f08080;
-            color: white;
+            background-color: #ff9100;;
+            color: rgb(0, 0, 0);
             border: none;
-            padding: 5px 10px;
+            padding: 1% 4%; 
             border-radius: 5px;
             cursor: pointer;
+            font-size: 2vh; 
         }
         
         h1 {
             display: inline;
         }
+
+        @media only screen and (max-width: 600px) {
+            #chat {
+                height: 60vh;
+                font-size: 2vh;
+            }
+
+            .message {
+                padding: 2%; 
+                margin-bottom: 2%; 
+            }
+
+            #messageForm textarea {
+                width: 100%; 
+            }
+
+            #messageForm button {
+                padding: 8px; 
+                font-size: 2vh; 
+            }
+
+            h1 {
+                font-size: 2.5vh; 
+            }
+
+            #logout {
+                padding: 1%; 
+                font-size: 2vh; 
+            }
+        }
     </style>
 </head>
-
 <!--Main Body-->
 <body>
-    <h1>FSE Chat Room</h1>
-    <button id="logout">Logout</button>
+    <div class="header">
+        <h1>FSE Chat Room</h1>
+        <button id="logout">Logout</button>
+    </div>    
     <div id="chat">
         <% messages.forEach(function(message) { %>
             <div class="message">
@@ -96,8 +158,10 @@
     </div>
     <form id="messageForm" action="/messages" method="post">
         <input type="hidden" name="username" value="<%= username %>">
-        <textarea name="message" placeholder="Enter your message" required></textarea>
-        <button type="submit">Post</button>
+        <textarea name="message" required></textarea>
+        <div class="button-container">
+            <button type="submit">Post</button>
+        </div>
     </form>
 
     <!--JavaScript-->
